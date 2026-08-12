@@ -201,3 +201,71 @@ For questions about this legacy system or modernization efforts, please contact 
 **Created:** 2026  
 **Last Updated:** August 2026  
 **Status:** Target for modernization
+
+---
+
+## System Data Flow Sequence Diagram
+
+```mermaid
+sequenceDiagram
+    actor User
+    participant Main as MainProgram<br/>(main.cob)
+    participant Ops as Operations<br/>(operations.cob)
+    participant Data as DataProgram<br/>(data.cob)
+
+    User->>Main: Selects menu option (1-4)
+    
+    alt View Balance (Option 1)
+        Main->>Ops: CALL 'Operations' USING 'TOTAL '
+        Ops->>Data: CALL 'DataProgram' USING 'READ'
+        Data->>Data: Retrieve STORAGE-BALANCE
+        Data-->>Ops: Return balance
+        Ops->>Ops: Display balance
+        Ops-->>Main: GOBACK
+        Main->>User: Show balance
+    else Credit Account (Option 2)
+        Main->>Ops: CALL 'Operations' USING 'CREDIT'
+        Ops->>User: Prompt for credit amount
+        User->>Ops: Enter amount
+        Ops->>Data: CALL 'DataProgram' USING 'READ'
+        Data->>Data: Retrieve STORAGE-BALANCE
+        Data-->>Ops: Return current balance
+        Ops->>Ops: ADD amount to balance
+        Ops->>Data: CALL 'DataProgram' USING 'WRITE'
+        Data->>Data: Update STORAGE-BALANCE
+        Data-->>Ops: GOBACK
+        Ops->>User: Display new balance
+        Ops-->>Main: GOBACK
+    else Debit Account (Option 3)
+        Main->>Ops: CALL 'Operations' USING 'DEBIT '
+        Ops->>User: Prompt for debit amount
+        User->>Ops: Enter amount
+        Ops->>Data: CALL 'DataProgram' USING 'READ'
+        Data->>Data: Retrieve STORAGE-BALANCE
+        Data-->>Ops: Return current balance
+        alt Sufficient Funds
+            Ops->>Ops: SUBTRACT amount from balance
+            Ops->>Data: CALL 'DataProgram' USING 'WRITE'
+            Data->>Data: Update STORAGE-BALANCE
+            Data-->>Ops: GOBACK
+            Ops->>User: Display new balance
+        else Insufficient Funds
+            Ops->>User: Display "Insufficient funds" error
+        end
+        Ops-->>Main: GOBACK
+    else Exit (Option 4)
+        Main->>Main: Set CONTINUE-FLAG to 'NO'
+        Main->>User: Display "Exiting the program"
+        Main->>Main: STOP RUN
+    end
+
+    Main->>Main: Return to menu (unless Exit selected)
+```
+
+**Key Data Flow Points:**
+
+- **Balance Retrieval (READ)**: Operations requests current balance from DataProgram before any transaction
+- **Balance Update (WRITE)**: After successful credit or debit, new balance is written back to DataProgram
+- **Validation Logic**: Debit transactions check balance availability before allowing withdrawal
+- **User Interaction**: MainProgram handles all user prompts; Operations performs calculations and balance updates
+- **Error Handling**: Insufficient funds error prevents transaction and returns user to menu
