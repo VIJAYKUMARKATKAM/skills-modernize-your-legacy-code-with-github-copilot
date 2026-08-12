@@ -1,0 +1,29 @@
+{
+  "name": "accounting-system",
+  "version": "1.0.0",
+  "description": "Student Account Management System - Node.js conversion from legacy COBOL application",
+  "main": "index.js",
+  "type": "commonjs",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "node index.js",
+    "test": "jest --verbose --coverage"
+  },
+  "keywords": [
+    "accounting",
+    "student-accounts",
+    "cobol-migration",
+    "nodejs"
+  ],
+  "author": "Mergington High School IT Department",
+  "license": "MIT",
+  "dependencies": {
+    "decimal.js": "^10.4.3"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "devDependencies": {
+    "jest": "^30.4.2"
+  }
+}

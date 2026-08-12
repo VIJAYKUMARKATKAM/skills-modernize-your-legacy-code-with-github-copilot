@@ -9,7 +9,7 @@
 ## Test Case Summary
 
 | Test Case ID | Test Case Description | Pre-conditions | Test Steps | Expected Result | Actual Result | Status | Comments |
-|---|---|---|---|---|---|---|---|
+| --- | --- | --- | --- | --- | --- | --- | --- |
 | TC-001 | System Initialization | N/A | 1. Launch the application | Application displays menu; Initial balance is 1000.00 | | | Initial balance value should be 1000.00 |
 | TC-002 | Menu Display | Application is running | 1. Observe the initial screen | Menu displays with options: 1. View Balance, 2. Credit Account, 3. Debit Account, 4. Exit | | | Verify all menu items are visible and numbered correctly |
 | TC-003 | View Balance - Initial State | Application is running | 1. Press '1' to view balance | Display: "Current balance: 1000.00" | | | Initial balance should be exactly 1000.00 |
@@ -46,19 +46,23 @@
 ## Test Case Categories
 
 ### 1. **Functional Requirements**
+
 - TC-001 to TC-003: System initialization and balance retrieval
 - TC-007 to TC-023: Credit and debit operations with various scenarios
 - TC-021: Program exit functionality
 
 ### 2. **Input Validation**
+
 - TC-004 to TC-006: Invalid menu selections
 - TC-024 to TC-025: Negative amount handling
 
 ### 3. **Business Logic**
+
 - TC-007 to TC-020: Core calculation logic (credit, debit, insufficient funds check)
 - TC-018 to TC-020: Balance persistence and state management
 
 ### 4. **Boundary & Edge Cases**
+
 - TC-009: Large amounts
 - TC-010, TC-017: Zero amounts
 - TC-015: Exact balance debit
@@ -66,6 +70,7 @@
 - TC-026 to TC-027: Maximum and minimum values
 
 ### 5. **Data Integrity**
+
 - TC-028 to TC-030: Data operations and consistency
 
 ---
@@ -100,6 +105,7 @@
 ## Notes for Node.js Migration
 
 When migrating this application to Node.js, ensure:
+
 1. Replicate all business logic rules exactly
 2. Maintain 2-decimal precision for currency operations (consider using BigDecimal or decimal.js)
 3. Implement state management to persist balance across operations

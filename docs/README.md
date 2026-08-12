@@ -13,22 +13,26 @@ This is a legacy COBOL-based accounting system used by Mergington High School to
 **Purpose:** Primary user interface and program controller for the student account management system.
 
 **Key Functions:**
+
 - Presents a menu-driven interface with four options
 - Manages program flow and user interaction loop
 - Routes user selections to appropriate operations
 
 **Menu Options:**
+
 1. **View Balance** - Displays the current account balance
 2. **Credit Account** - Adds funds to the student account
 3. **Debit Account** - Withdraws funds from the student account
 4. **Exit** - Terminates the program
 
 **Business Logic:**
+
 - Runs in a loop until user selects "Exit" (option 4)
 - Validates user input and handles invalid selections gracefully
 - Calls the `Operations` program with appropriate operation codes
 
 **Key Data Structures:**
+
 - `USER-CHOICE` (PIC 9): Stores the user's menu selection (1-4)
 - `CONTINUE-FLAG` (PIC X(3)): Controls the main loop execution
 
@@ -41,11 +45,13 @@ This is a legacy COBOL-based accounting system used by Mergington High School to
 **Key Functions:**
 
 #### **TOTAL Operation - View Balance**
+
 - Retrieves the current account balance from storage
 - Displays the balance to the user
 - Useful for: Students checking their account status, parents monitoring accounts
 
 #### **CREDIT Operation - Add Funds**
+
 - Prompts user to enter the credit amount
 - Retrieves current balance
 - Adds the credit amount to the balance
@@ -54,6 +60,7 @@ This is a legacy COBOL-based accounting system used by Mergington High School to
 - Useful for: Depositing lunch money, paying fees, adding funds for school supplies
 
 #### **DEBIT Operation - Withdraw Funds**
+
 - Prompts user to enter the debit amount
 - Validates sufficient funds availability (critical business rule)
 - If funds are sufficient: Deducts the amount and updates storage
@@ -62,12 +69,14 @@ This is a legacy COBOL-based accounting system used by Mergington High School to
 - Useful for: Charging lunch purchases, processing fee deductions, school supplies purchases
 
 **Business Rules:**
+
 - ✅ All transactions require balance validation
 - ✅ Overdrafts are **NOT permitted** - transactions fail if insufficient funds
 - ✅ Balances are stored with 2-decimal precision for currency (COBOL PIC 9(6)V99)
 - ✅ Initial account balance: $1,000.00
 
 **Key Data Structures:**
+
 - `OPERATION-TYPE` (PIC X(6)): Stores the operation code (TOTAL, CREDIT, DEBIT)
 - `AMOUNT` (PIC 9(6)V99): Stores transaction amount with 2 decimal places
 - `FINAL-BALANCE` (PIC 9(6)V99): Stores the current account balance
@@ -81,20 +90,24 @@ This is a legacy COBOL-based accounting system used by Mergington High School to
 **Key Functions:**
 
 #### **READ Operation**
+
 - Retrieves the stored balance from memory
 - Called before displaying or calculating new balances
 - Returns balance to the calling program
 
 #### **WRITE Operation**
+
 - Persists the updated balance to storage
 - Called after any transaction (credit or debit) that modifies the balance
 - Ensures data consistency across operations
 
 **Data Storage:**
+
 - `STORAGE-BALANCE` (PIC 9(6)V99): Central storage location for the account balance
 - Default value: 1,000.00 (initial account funding)
 
 **Linkage Protocol:**
+
 - Receives operation code (READ or WRITE) and balance value
 - Handles all data persistence operations
 - Supports inter-program communication via CALL statements
@@ -103,7 +116,7 @@ This is a legacy COBOL-based accounting system used by Mergington High School to
 
 ## System Architecture
 
-```
+```text
 ┌─────────────────────────────────────────────────────────┐
 │                    MainProgram (main.cob)               │
 │              (User Interface & Flow Control)             │
@@ -129,6 +142,7 @@ This is a legacy COBOL-based accounting system used by Mergington High School to
 ## Student Account Business Rules
 
 ### Account Types Supported
+
 1. **Student Lunch/Cafeteria Account** - Charges for daily meal purchases
 2. **School Fees Account** - Tracks tuition, facility, and technology fees
 3. **School Supplies Account** - Manages purchases from school supply store
@@ -136,7 +150,7 @@ This is a legacy COBOL-based accounting system used by Mergington High School to
 ### Key Business Rules
 
 | Rule | Description | Implementation |
-|------|-------------|-----------------|
+| --- | --- | --- |
 | **Minimum Balance** | Accounts cannot go negative (no overdrafts) | Debit validation in Operations |
 | **Precision** | All amounts stored with 2 decimal places | PIC 9(6)V99 format |
 | **Initial Funding** | New accounts start with $1,000.00 | Set in DataProgram WORKING-STORAGE |
@@ -144,6 +158,7 @@ This is a legacy COBOL-based accounting system used by Mergington High School to
 | **Real-time Updates** | Balance changes persist immediately | WRITE operation after each transaction |
 
 ### Account Balance Ranges
+
 - **Minimum**: $0.00 (zero balance allowed, but no negative)
 - **Maximum**: $999,999.99 (6-digit storage limit)
 
@@ -151,7 +166,7 @@ This is a legacy COBOL-based accounting system used by Mergington High School to
 
 ## Data Flow Example: Cafeteria Purchase
 
-```
+```plaintext
 1. User selects "Debit Account" (option 3) in MainProgram
 2. Operations program receives 'DEBIT ' operation
 3. User prompted to enter purchase amount (e.g., $5.50)
@@ -167,16 +182,19 @@ This is a legacy COBOL-based accounting system used by Mergington High School to
 ## Technical Specifications
 
 ### Language & Platform
+
 - **Language**: COBOL (Common Business-Oriented Language)
 - **Original Release**: Early 1990s
 - **Current Status**: Legacy system - target for modernization to Node.js
 
 ### Data Types
+
 - Monetary values: `PIC 9(6)V99` (6-digit whole part + 2-digit decimal)
 - Operation codes: `PIC X(6)` (6-character strings)
 - User input: `PIC 9` (single digit 0-9)
 
 ### Inter-program Communication
+
 - Uses COBOL CALL statements for modular architecture
 - Parameters passed via LINKAGE SECTION
 - Uses GOBACK to return control to calling program
@@ -186,6 +204,7 @@ This is a legacy COBOL-based accounting system used by Mergington High School to
 ## Future Modernization
 
 This system is scheduled for modernization from COBOL to **Node.js** to:
+
 - ✅ Improve developer accessibility (fewer COBOL specialists needed)
 - ✅ Enable modern web-based interface for students and parents
 - ✅ Integrate with modern school management systems
